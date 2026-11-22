@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asisten SOP Operasional - NICESO</title>
+
+  <!-- Font Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Library Marked.js untuk merender format Markdown dari Gemini -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    :root {
+      --niceso-red: #c00000;
+      --niceso-dark-red: #990000;
+      --niceso-red-light: #fef2f2;
+      --niceso-red-border: #fecaca;
+      --accent-red: #f87171;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --border: #e5e7eb;
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --success: #0e9f6e;
+      --ring: rgba(192, 0, 0, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 20px 12px 32px 12px;
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: var(--surface);
+      padding: 0;
+      border-radius: 18px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    /* HEADER SLATE GELAP + AKSEN MERAH NICESO */
+    .header {
+      background: linear-gradient(135deg, var(--slate-900) 0%, var(--slate-800) 100%);
+      color: #ffffff;
+      padding: 26px 22px 22px 22px;
+      text-align: center;
+      border-top: 4px solid var(--niceso-red);
+      position: relative;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(192, 0, 0, 0.22);
+      border: 1px solid rgba(248, 113, 113, 0.35);
+      color: var(--accent-red);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: #ffffff;
+    }
+
+    .header p {
+      margin: 6px 0 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .badge-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(14, 159, 110, 0.16);
+      border: 1px solid rgba(14, 159, 110, 0.45);
+      color: #ecfdf5;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--success);
+      box-shadow: 0 0 0 3px rgba(14, 159, 110, 0.3);
+      flex-shrink: 0;
+    }
+
+    .btn-logout {
+      width: auto;
+      padding: 6px 13px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #e2e8f0;
+      border-radius: 999px;
+      box-shadow: none;
+    }
+
+    .btn-logout:hover {
+      background: rgba(248, 113, 113, 0.2);
+      border-color: var(--accent-red);
+      color: #ffffff;
+      transform: none;
+      filter: none;
+    }
+
+    .body-content {
+      padding: 24px 22px 14px 22px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background-color: var(--surface);
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--niceso-red);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    /* CHIP PERTANYAAN CEPAT */
+    .quick-section {
+      margin-bottom: 16px;
+    }
+
+    .quick-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip-btn {
+      width: auto;
+      padding: 7px 12px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: none;
+      transition: all 0.18s ease;
+      line-height: 1.2;
+    }
+
+    .chip-btn:hover:not(:disabled) {
+      background: var(--niceso-red-light);
+      border-color: var(--niceso-red-border);
+      color: var(--niceso-red);
+      transform: translateY(-1px);
+      filter: none;
+    }
+
+    .chip-btn.active {
+      background: var(--niceso-red-light);
+      border-color: var(--niceso-red);
+      color: var(--niceso-dark-red);
+    }
+
+    .chip-btn:disabled {
+      opacity: 0.55;
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* TOMBOL UTAMA */
+    button.btn-primary {
+      width: 100%;
+      padding: 13px 16px;
+      background: linear-gradient(135deg, var(--niceso-red) 0%, var(--niceso-dark-red) 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14.5px;
+      font-family: inherit;
+      letter-spacing: 0.2px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 16px rgba(192, 0, 0, 0.24);
+    }
+
+    button.btn-primary:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    button.btn-primary:active {
+      transform: translateY(0);
+    }
+
+    button.btn-primary:disabled {
+      background: #cbd5e1;
+      color: #64748b;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+      filter: none;
+    }
+
+    .hidden { display: none !important; }
+
+    .error {
+      color: var(--niceso-red);
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .error-banner {
+      background: var(--niceso-red-light);
+      border: 1px solid var(--niceso-red-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      text-align: left;
+    }
+
+    /* KOTAK JAWABAN */
+    .jawaban-box {
+      background: var(--surface);
+      padding: 18px;
+      border-left: 4px solid var(--niceso-red);
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      border-radius: 12px;
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-main);
+      max-height: 520px;
+      overflow-y: auto;
+      word-wrap: break-word;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .jawaban-box h1, .jawaban-box h2, .jawaban-box h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      color: var(--niceso-dark-red);
+    }
+
+    .jawaban-box p {
+      margin: 0 0 10px 0;
+      color: var(--text-secondary);
+    }
+
+    .jawaban-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .jawaban-box strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .jawaban-box ol, .jawaban-box ul {
+      margin: 8px 0 12px 0;
+      padding-left: 20px;
+      color: var(--text-secondary);
+    }
+
+    .jawaban-box li {
+      margin-bottom: 6px;
+    }
+
+    /* LOADING INDICATOR */
+    .loading-box {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13.5px;
+      color: var(--niceso-dark-red);
+      font-weight: 600;
+      padding: 14px;
+      background: var(--niceso-red-light);
+      border-radius: 12px;
+      border: 1px solid var(--niceso-red-border);
+    }
+
+    /* FOOTER BAR */
+    .footer-credit {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 12px 22px 16px 22px;
+      border-top: 1px solid var(--border);
+      background: #fcfcfd;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+
+    .footer-tag {
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="brand-pill">NICESO OPERASIONAL</div>
+      <h2>📋 Asisten SOP Operasional</h2>
+      <p>PT Niceso Sukses Indonesia</p>
+      <div id="badgeRow" class="badge-row hidden">
+        <div class="store-badge">
+          <span class="status-dot"></span>
+          <span id="storeBadge">Toko</span>
+        </div>
+        <button type="button" class="btn-logout" onclick="prosesLogout()">Keluar</button>
+      </div>
+    </div>
+
+    <div class="body-content">
+      <!-- LAYAR 1: LOGIN TOKO -->
+      <div id="loginSection">
+        <div class="form-group">
+          <label for="kodeTokoInput">Kode Toko</label>
+          <input type="text" id="kodeTokoInput" placeholder="Contoh: N111" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="pinInput">PIN Toko</label>
+          <input type="password" id="pinInput" placeholder="Masukkan PIN Toko" autocomplete="current-password">
+        </div>
+        <button id="btnLogin" class="btn-primary" onclick="prosesLogin()">Masuk Aplikasi</button>
+        <div id="loginError" class="error"></div>
+      </div>
+
+      <!-- LAYAR 2: TANYA SOP -->
+      <div id="chatSection" class="hidden">
+        <div class="form-group">
+          <label for="pertanyaanInput">Ketik pertanyaan seputar prosedur toko:</label>
+          <textarea id="pertanyaanInput" rows="3" placeholder="Contoh: Prosedur buka toko atau selisih kasir"></textarea>
+        </div>
+
+        <!-- CHIP PERTANYAAN CEPAT -->
+        <div class="quick-section">
+          <div class="quick-label">Topik Cepat SOP</div>
+          <div class="quick-chips" id="quickChips">
+            <button type="button" class="chip-btn" data-q="Bagaimana prosedur buka toko (opening)?" onclick="pilihChip(this)">🔓 Buka Toko</button>
+            <button type="button" class="chip-btn" data-q="Bagaimana prosedur tutup toko (closing)?" onclick="pilihChip(this)">🔒 Tutup Toko</button>
+            <button type="button" class="chip-btn" data-q="Bagaimana prosedur setoran bank harian?" onclick="pilihChip(this)">🏦 Setoran Bank</button>
+            <button type="button" class="chip-btn" data-q="Bagaimana prosedur pelaksanaan SO Harian?" onclick="pilihChip(this)">📦 SO Harian</button>
+            <button type="button" class="chip-btn" data-q="Bagaimana prosedur penerimaan barang di toko?" onclick="pilihChip(this)">🚚 Penerimaan Barang</button>
+            <button type="button" class="chip-btn" data-q="Bagaimana prosedur penanganan selisih kasir?" onclick="pilihChip(this)">💰 Selisih Kasir</button>
+          </div>
+        </div>
+
+        <button id="btnTanya" class="btn-primary" onclick="prosesTanya()">Cari di SOP</button>
+
+        <div id="loading" class="loading-box hidden">🔍 Sedang membaca dokumen & memproses SOP...</div>
+        <div id="tanyaError" class="error error-banner hidden"></div>
+        <div id="jawabanBox" class="jawaban-box hidden"></div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-credit">
+      <span class="footer-tag">Portal SOP Toko</span>
+      <span>bySeptiandi</span>
+    </div>
+  </div>
+
+  <script>
+    // URL Deployment Google Apps Script Anda
+    var API_URL = "https://script.google.com/macros/s/AKfycbwMDmbl3V4u4dY-fUy3QNAEahOVelXUrrxFssScpZL5KmzCagvwWAmcvCk4mSajKnFxTQ/exec";
+
+    var currentKodeToko = "";
+    var sedangMemproses = false;
+
+    async function callAppsScript(payload) {
+      var response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload),
+        redirect: "follow"
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+
+      return await response.json();
+    }
+
+    document.getElementById('pinInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') prosesLogin();
+    });
+
+    // Hapus status aktif chip jika user mengetik manual
+    document.getElementById('pertanyaanInput').addEventListener('input', function() {
+      hapusActiveChip();
+    });
+
+    function hapusActiveChip() {
+      var chips = document.querySelectorAll('.chip-btn');
+      chips.forEach(function(btn) { btn.classList.remove('active'); });
+    }
+
+    function setChipsDisabled(status) {
+      var chips = document.querySelectorAll('.chip-btn');
+      chips.forEach(function(btn) { btn.disabled = status; });
+    }
+
+    function pilihChip(btn) {
+      if (sedangMemproses) return;
+      var teksPertanyaan = btn.getAttribute('data-q');
+      hapusActiveChip();
+      btn.classList.add('active');
+      document.getElementById('pertanyaanInput').value = teksPertanyaan;
+      prosesTanya();
+    }
+
+    async function prosesLogin() {
+      var kode = document.getElementById('kodeTokoInput').value;
+      var pin = document.getElementById('pinInput').value;
+      var btnLogin = document.getElementById('btnLogin');
+      var loginError = document.getElementById('loginError');
+
+      if (!kode.trim() || !pin.trim()) {
+        loginError.innerText = "Kode Toko dan PIN wajib diisi!";
+        return;
+      }
+
+      loginError.innerText = "";
+      btnLogin.disabled = true;
+      btnLogin.innerText = "Memverifikasi...";
+
+      try {
+        var res = await callAppsScript({
+          action: "login",
+          kodeToko: kode,
+          pin: pin
+        });
+
+        if (res && res.success) {
+          currentKodeToko = res.kodeToko;
+          document.getElementById('loginSection').classList.add('hidden');
+          document.getElementById('chatSection').classList.remove('hidden');
+          document.getElementById('storeBadge').innerText = res.namaToko + " (" + res.kodeToko + ")";
+          document.getElementById('badgeRow').classList.remove('hidden');
+        } else {
+          loginError.innerText = (res && res.message) ? res.message : "Gagal memverifikasi toko.";
+        }
+      } catch (err) {
+        loginError.innerText = "Gagal terhubung ke server: " + err.message;
+      } finally {
+        btnLogin.disabled = false;
+        btnLogin.innerText = "Masuk Aplikasi";
+      }
+    }
+
+    function prosesLogout() {
+      currentKodeToko = "";
+      hapusActiveChip();
+      document.getElementById('pinInput').value = "";
+      document.getElementById('pertanyaanInput').value = "";
+      document.getElementById('jawabanBox').classList.add('hidden');
+      document.getElementById('tanyaError').classList.add('hidden');
+      document.getElementById('chatSection').classList.add('hidden');
+      document.getElementById('badgeRow').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+    }
+
+    function tampilkanErrorTanya(pesan) {
+      var tanyaError = document.getElementById('tanyaError');
+      tanyaError.innerText = "⚠️ " + pesan;
+      tanyaError.classList.remove('hidden');
+    }
+
+    async function prosesTanya() {
+      if (sedangMemproses) return;
+
+      var pertanyaan = document.getElementById('pertanyaanInput').value;
+      var btnTanya = document.getElementById('btnTanya');
+      var loading = document.getElementById('loading');
+      var jawabanBox = document.getElementById('jawabanBox');
+      var tanyaError = document.getElementById('tanyaError');
+
+      tanyaError.classList.add('hidden');
+
+      if (!pertanyaan.trim()) {
+        tampilkanErrorTanya("Silakan ketik pertanyaan terlebih dahulu.");
+        return;
+      }
+
+      sedangMemproses = true;
+      loading.classList.remove('hidden');
+      jawabanBox.classList.add('hidden');
+      btnTanya.disabled = true;
+      setChipsDisabled(true);
+
+      try {
+        var res = await callAppsScript({
+          action: "tanya",
+          kodeToko: currentKodeToko,
+          pertanyaan: pertanyaan
+        });
+
+        if (res && res.success) {
+          if (typeof marked !== 'undefined' && marked.parse) {
+            jawabanBox.innerHTML = marked.parse(res.jawaban);
+          } else {
+            jawabanBox.innerText = res.jawaban;
+          }
+          jawabanBox.classList.remove('hidden');
+          jawabanBox.scrollTop = 0;
+        } else {
+          tampilkanErrorTanya((res && res.error) ? res.error : "Terjadi kesalahan yang tidak diketahui.");
+        }
+      } catch (err) {
+        tampilkanErrorTanya("Terjadi kesalahan koneksi: " + err.message);
+      } finally {
+        sedangMemproses = false;
+        loading.classList.add('hidden');
+        btnTanya.disabled = false;
+        setChipsDisabled(false);
+      }
+    }
+  </script>
+</body>
+</html>
